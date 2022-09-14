@@ -3,7 +3,7 @@ import './styles/main.css'
 function App() {
   
   return (
-    <h1>Hello nlw</h1>
+    <h1 className='text-cyan-500'>Hello nlw</h1>
   )
 }
 
