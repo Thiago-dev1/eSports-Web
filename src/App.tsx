@@ -1,9 +1,13 @@
 import './styles/main.css'
 
+import Logo from "./assets/Logo.svg"
+
 function App() {
   
   return (
-    <h1 className='text-cyan-500'>Hello nlw</h1>
+    <div className='max-w-[1334px] mx-auto flex flex-col items-center my-20'>
+      <img src={Logo} alt="Logo" />
+    </div>
   )
 }
 
