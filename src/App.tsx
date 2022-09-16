@@ -3,13 +3,29 @@ import { MagnifyingGlassPlus } from 'phosphor-react'
 import './styles/main.css'
 
 import Logo from "./assets/Logo.svg"
-import Game1 from "./assets/game-1.png"
 
 import { GameBanner } from './components/GameBanner'
+import { useEffect, useState } from 'react'
 
+interface Game {
+  bannerUrl: string,
+  id: string,
+  title: string,
+  _count: {
+    Ad: number
+  }
+}
 
 
 function App() {
+
+  const [games, setGames] = useState<Game[]>([])
+
+  useEffect(() => {
+    fetch("http://localhost:3333/games")
+      .then(response => response.json())
+      .then(data => setGames(data))
+  }, [])
 
   return (
     <div className='max-w-[1334px] mx-auto flex flex-col items-center my-20'>
@@ -17,7 +33,11 @@ function App() {
       <h1 className='text-white text-6xl mt-20 font-black'>Seu <span className='text-transparent bg-nlw-gradient bg-clip-text'>duo</span> está aqui.</h1>
 
       <div className='grid grid-cols-6 gap-6 mt-16'>
-        <GameBanner bannerUrl={Game1} title="League of Legends" count={4}/>
+        {games.map(game => {
+          return (
+            <GameBanner key={game.id} bannerUrl={game.bannerUrl} title={game.title} count={game._count.Ad} />
+          )
+        })}
       </div>
 
       <div className='pt-1 bg-nlw-gradient mt-8 self-stretch rounded-lg overflow-hidden'>
@@ -28,8 +48,8 @@ function App() {
           </div>
 
           <button className='py-3 px-4 bg-violet-500 hover:bg-violet-600 text-white rounded flex gap-3'>
-            <MagnifyingGlassPlus size={24}/>
-            Publicar anúncio 
+            <MagnifyingGlassPlus size={24} />
+            Publicar anúncio
           </button>
         </div>
       </div>

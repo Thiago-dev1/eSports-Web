@@ -1,5 +1,3 @@
-import Game1 from "../assets/game-1.png"
-
 interface GameProps {
     title: string,
     bannerUrl: string,
