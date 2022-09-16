@@ -52,10 +52,15 @@ function App() {
           <Dialog.Content className='fixed bg-[#2A2634] py-8 px-10 text-white top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded w-[480px] shadow-lg shadow-black/25'>
             <Dialog.Title className='text-3xl font-black'>Publique um anúncio</Dialog.Title>
 
-            <form>
-              <div>
-                <label htmlFor="game">Qual o game</label>
-                <input id="game" type="text" placeholder='Selecione o game que deseja jogar'/>
+            <form className='mt-6'>
+              <div className='flex flex-col gap-2'>
+                <label htmlFor="game" className='font-semibold'>Qual o game</label>
+                <input 
+                  id="game" 
+                  type="text" 
+                  placeholder='Selecione o game que deseja jogar'
+                  className='bg-zinc-900 px-4 py-3 rounded text-sm placeholder:text-zinc-500'
+                  />
               </div>
 
               <div>
