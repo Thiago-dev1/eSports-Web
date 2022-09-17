@@ -36,9 +36,8 @@ export function CreateAdModal() {
     }, [])
 
 
-    const handleCreadtAd: SubmitHandler<CreateAdProps> = async data => {
-
-        console.log(data.game)
+    const handleCreadtAd: SubmitHandler<CreateAdProps> = async (data, event) => {
+        event?.preventDefault()
 
         try {
             await axios.post("http://localhost:3333/ads", {
@@ -224,8 +223,7 @@ export function CreateAdModal() {
 
                         <button
                             type="submit"
-                            className="bg-violet-500 hover:bg-violet-600 px-5 h-12 rounded-md font-semibold flex items-center gap-3"
-
+                            className="bg-violet-500 hover:bg-violet-600 px-5 h-12 rounded-md font-semibold flex items-center gap-3"       
                         >
                             <GameController size={24} />
                             Encontrar Duo
