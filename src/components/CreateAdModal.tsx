@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react"
-
+import axios from "axios"
 import * as Dialog from "@radix-ui/react-dialog"
 import * as Checkbox from "@radix-ui/react-checkbox"
 import * as TaggleGroup from "@radix-ui/react-toggle-group"
 import { Check, GameController } from "phosphor-react"
 
 import { Input } from "./Form/Input"
+
 
 
 
@@ -19,9 +20,8 @@ export function CreateAdModal() {
     const [weekDays, setWeekDays] = useState<string[]>([])
 
     useEffect(() => {
-        fetch("http://localhost:3333/games")
-          .then(response => response.json())
-          .then(data => setGames(data))
+        axios("http://localhost:3333/games")
+          .then(response => setGames(response.data))
       }, [])
 
     return (
@@ -132,7 +132,7 @@ export function CreateAdModal() {
                         </div>
                     </div>
 
-                    <div className="mt-2 flex gap-2 text-sm flex items-center">
+                    <div className="mt-2 flex gap-2 text-sm items-center">
                         <Checkbox.Root className="w-6 h-6 p-1 bg-zinc-900 rounded">
                             <Checkbox.CheckboxIndicator>
                                 <Check  className="w-4 h-4 text-emerald-400" />
