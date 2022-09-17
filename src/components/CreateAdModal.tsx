@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { FormEvent, useEffect, useState } from "react"
 import axios from "axios"
 import * as Dialog from "@radix-ui/react-dialog"
 import * as Checkbox from "@radix-ui/react-checkbox"
@@ -8,22 +8,48 @@ import { Check, GameController } from "phosphor-react"
 import { Input } from "./Form/Input"
 
 
-
-
 interface Game {
     id: string,
     title: string,
-  }
+}
 
 export function CreateAdModal() {
     const [games, setGames] = useState<Game[]>([])
     const [weekDays, setWeekDays] = useState<string[]>([])
+    const [useVoiceChannel, setUseVoiceChannel] = useState<boolean>(false)
 
     useEffect(() => {
         axios("http://localhost:3333/games")
-          .then(response => setGames(response.data))
-      }, [])
+            .then(response => setGames(response.data))
+    }, [])
 
+
+    async function handleCreadtAd(event: FormEvent) {
+        event.preventDefault()
+
+        const formData = new FormData(event.target as HTMLFormElement)
+
+        const data = Object.fromEntries(formData)
+
+        try {
+            await axios.post("http://localhost:3333/ads", {
+
+                gameId: data.game,
+                name: data.name,
+                discord: data.discord,
+                yearsPlaying: Number(data.yearsPlaying),
+                weekDays: weekDays.map(Number),
+                hourStart: data.hourStart,
+                hourEnd: data.hourEnd,
+                useVoiceChannel: useVoiceChannel
+            })
+
+            alert("Anúncio criado com sucesso!!!")
+        } catch (err) {
+            alert("Erro")
+            console.log(err)
+        }
+    }
     return (
         <Dialog.Portal>
             <Dialog.Overlay className='bg-black/60 inset-0 fixed' />
@@ -31,15 +57,16 @@ export function CreateAdModal() {
             <Dialog.Content className='fixed bg-[#2A2634] py-8 px-10 text-white top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded w-[480px] shadow-lg shadow-black/25'>
                 <Dialog.Title className='text-3xl font-black'>Publique um anúncio</Dialog.Title>
 
-                <form className='mt-6 flex flex-col gap-4'>
+                <form onSubmit={handleCreadtAd} className='mt-6 flex flex-col gap-4'>
                     <div className='flex flex-col gap-2'>
                         <label htmlFor="game" className='font-semibold'>Qual o game</label>
-                        <select 
+                        <select
+                            name="game"
                             id="game"
                             className="bg-zinc-900 px-4 py-3 rounded text-sm placeholder:text-zinc-500"
                             defaultValue=""
                         >
-                            <option value="" disabled selected>Selecione o game que deseja jogar</option>
+                            <option defaultValue="" disabled selected>Selecione o game que deseja jogar</option>
 
                             {games.map(game => {
                                 return <option key={game.id} value={game.id}>{game.title}</option>
@@ -49,17 +76,17 @@ export function CreateAdModal() {
 
                     <div className='flex flex-col gap-2'>
                         <label htmlFor="name" className='font-semibold'>Seu nome  (ou nickname)</label>
-                        <Input id="name" placeholder="Como te chamam dentro do game?" />
+                        <Input name="name" id="name" placeholder="Como te chamam dentro do game?" />
                     </div>
 
                     <div className="grid grid-cols-2 gap-2">
                         <div className="flex flex-col gap-2">
                             <label htmlFor="yearsPlaying">Joga há quantos anos</label>
-                            <Input id="yearsPlaying" type="number" placeholder="Tudo bem ser ZERO" />
+                            <Input name="yearsPlaying" id="yearsPlaying" type="number" placeholder="Tudo bem ser ZERO" />
                         </div>
                         <div className="flex flex-col gap-2">
                             <label htmlFor="discord">Qual seu Discord</label>
-                            <Input id="discord" placeholder="Usuario#0000" />
+                            <Input name="discord" id="discord" placeholder="Usuario#0000" />
                         </div>
                     </div>
 
@@ -126,16 +153,25 @@ export function CreateAdModal() {
                         <div className="flex flex-col gap-2 flex-1">
                             <label htmlFor="hourStart">Qual horário do dia</label>
                             <div className="grid grid-cols-2 gap-2">
-                                <Input id="hourStart" type="time" placeholder="De" />
-                                <Input id="hourEnd" type="time" placeholder="Até" />
+                                <Input name="hourStart" id="hourStart" type="time" placeholder="De" />
+                                <Input name="hourEnd" id="hourEnd" type="time" placeholder="Até" />
                             </div>
                         </div>
                     </div>
 
                     <div className="mt-2 flex gap-2 text-sm items-center">
-                        <Checkbox.Root className="w-6 h-6 p-1 bg-zinc-900 rounded">
+                        <Checkbox.Root
+                            className="w-6 h-6 p-1 bg-zinc-900 rounded"
+                            onCheckedChange={(checked) => {
+                                if (checked === true) {
+                                    setUseVoiceChannel(true)
+                                } else {
+                                    setUseVoiceChannel(false)
+                                }
+                            }}
+                        >
                             <Checkbox.CheckboxIndicator>
-                                <Check  className="w-4 h-4 text-emerald-400" />
+                                <Check className="w-4 h-4 text-emerald-400" />
                             </Checkbox.CheckboxIndicator>
                         </Checkbox.Root>
                         Custumo me conectar ao chat de voz
