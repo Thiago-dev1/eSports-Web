@@ -6,6 +6,7 @@ import * as TaggleGroup from "@radix-ui/react-toggle-group"
 import { Check, GameController } from "phosphor-react"
 
 import { Input } from "./Form/Input"
+import { SubmitHandler, useForm } from "react-hook-form"
 
 
 interface Game {
@@ -13,7 +14,18 @@ interface Game {
     title: string,
 }
 
+interface CreateAdProps {
+    game: string,
+    name: string,
+    discord: string,
+    yearsPlaying: string,
+    hourStart: string,
+    hourEnd: string
+}
+
 export function CreateAdModal() {
+    const { register, handleSubmit } = useForm<CreateAdProps>()
+
     const [games, setGames] = useState<Game[]>([])
     const [weekDays, setWeekDays] = useState<string[]>([])
     const [useVoiceChannel, setUseVoiceChannel] = useState<boolean>(false)
@@ -24,12 +36,9 @@ export function CreateAdModal() {
     }, [])
 
 
-    async function handleCreadtAd(event: FormEvent) {
-        event.preventDefault()
+    const handleCreadtAd: SubmitHandler<CreateAdProps> = async data => {
 
-        const formData = new FormData(event.target as HTMLFormElement)
-
-        const data = Object.fromEntries(formData)
+        console.log(data.game)
 
         try {
             await axios.post("http://localhost:3333/ads", {
@@ -50,6 +59,35 @@ export function CreateAdModal() {
             console.log(err)
         }
     }
+
+
+    // async function handleCreadtAd(event: FormEvent) {
+    //     event.preventDefault()
+
+    //     const formData = new FormData(event.target as HTMLFormElement)
+
+    //     const data = Object.fromEntries(formData)
+
+
+    //     try {
+    //         await axios.post("http://localhost:3333/ads", {
+
+    //             gameId: data.game,
+    //             name: data.name,
+    //             discord: data.discord,
+    //             yearsPlaying: Number(data.yearsPlaying),
+    //             weekDays: weekDays.map(Number),
+    //             hourStart: data.hourStart,
+    //             hourEnd: data.hourEnd,
+    //             useVoiceChannel: useVoiceChannel
+    //         })
+
+    //         alert("Anúncio criado com sucesso!!!")
+    //     } catch (err) {
+    //         alert("Erro")
+    //         console.log(err)
+    //     }
+    // }
     return (
         <Dialog.Portal>
             <Dialog.Overlay className='bg-black/60 inset-0 fixed' />
@@ -57,14 +95,14 @@ export function CreateAdModal() {
             <Dialog.Content className='fixed bg-[#2A2634] py-8 px-10 text-white top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded w-[480px] shadow-lg shadow-black/25'>
                 <Dialog.Title className='text-3xl font-black'>Publique um anúncio</Dialog.Title>
 
-                <form onSubmit={handleCreadtAd} className='mt-6 flex flex-col gap-4'>
+                <form onSubmit={handleSubmit(handleCreadtAd)} className='mt-6 flex flex-col gap-4'>
                     <div className='flex flex-col gap-2'>
                         <label htmlFor="game" className='font-semibold'>Qual o game</label>
                         <select
-                            name="game"
                             id="game"
                             className="bg-zinc-900 px-4 py-3 rounded text-sm placeholder:text-zinc-500"
                             defaultValue=""
+                            {...register("game")}
                         >
                             <option defaultValue="" disabled selected>Selecione o game que deseja jogar</option>
 
@@ -76,17 +114,17 @@ export function CreateAdModal() {
 
                     <div className='flex flex-col gap-2'>
                         <label htmlFor="name" className='font-semibold'>Seu nome  (ou nickname)</label>
-                        <Input name="name" id="name" placeholder="Como te chamam dentro do game?" />
+                        <Input id="name" placeholder="Como te chamam dentro do game?" {...register("name")} />
                     </div>
 
                     <div className="grid grid-cols-2 gap-2">
                         <div className="flex flex-col gap-2">
                             <label htmlFor="yearsPlaying">Joga há quantos anos</label>
-                            <Input name="yearsPlaying" id="yearsPlaying" type="number" placeholder="Tudo bem ser ZERO" />
+                            <Input id="yearsPlaying" type="number" placeholder="Tudo bem ser ZERO" {...register("yearsPlaying")} />
                         </div>
                         <div className="flex flex-col gap-2">
                             <label htmlFor="discord">Qual seu Discord</label>
-                            <Input name="discord" id="discord" placeholder="Usuario#0000" />
+                            <Input id="discord" placeholder="Usuario#0000" {...register("discord")} />
                         </div>
                     </div>
 
@@ -153,8 +191,8 @@ export function CreateAdModal() {
                         <div className="flex flex-col gap-2 flex-1">
                             <label htmlFor="hourStart">Qual horário do dia</label>
                             <div className="grid grid-cols-2 gap-2">
-                                <Input name="hourStart" id="hourStart" type="time" placeholder="De" />
-                                <Input name="hourEnd" id="hourEnd" type="time" placeholder="Até" />
+                                <Input id="hourStart" type="time" placeholder="De" {...register("hourStart")} />
+                                <Input id="hourEnd" type="time" placeholder="Até" {...register("hourEnd")} />
                             </div>
                         </div>
                     </div>
