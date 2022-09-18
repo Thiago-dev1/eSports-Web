@@ -6,7 +6,7 @@ import * as TaggleGroup from "@radix-ui/react-toggle-group"
 import { Check, GameController } from "phosphor-react"
 
 import { Input } from "./Form/Input"
-import { SubmitHandler, useForm } from "react-hook-form"
+import { SubmitHandler, useForm, FormState } from "react-hook-form"
 
 
 interface Game {
@@ -24,7 +24,7 @@ interface CreateAdProps {
 }
 
 export function CreateAdModal() {
-    const { register, handleSubmit } = useForm<CreateAdProps>()
+    const { register, handleSubmit, formState: { errors } } = useForm<CreateAdProps>()
 
     const [games, setGames] = useState<Game[]>([])
     const [weekDays, setWeekDays] = useState<string[]>([])
@@ -112,18 +112,44 @@ export function CreateAdModal() {
                     </div>
 
                     <div className='flex flex-col gap-2'>
-                        <label htmlFor="name" className='font-semibold'>Seu nome  (ou nickname)</label>
-                        <Input id="name" placeholder="Como te chamam dentro do game?" {...register("name")} />
+                        <label 
+                            htmlFor="name" 
+                            className={`font-semibold ${errors.name
+                                ? "text-red-300 border-red-400"
+                                : "text-white border-purple-400"
+                            }`}>Seu nome  (ou nickname)</label>
+                        <Input
+                            id="name"
+                            placeholder="Como te chamam dentro do game?"
+                            error={errors.name}
+                            {...register("name", { required: "Digite seu nick" })}
+                        />
+                        {errors.name && (
+                            <p className="text-red-500 text-sm mt-2">
+                                {errors.name.message}
+                            </p>
+                        )}
+
                     </div>
 
                     <div className="grid grid-cols-2 gap-2">
                         <div className="flex flex-col gap-2">
-                            <label htmlFor="yearsPlaying">Joga há quantos anos</label>
-                            <Input id="yearsPlaying" type="number" placeholder="Tudo bem ser ZERO" {...register("yearsPlaying")} />
+                            <label 
+                                htmlFor="yearsPlaying"
+                                className={`font-semibold ${errors.yearsPlaying
+                                    ? "text-red-300 border-red-400"
+                                    : "text-white border-purple-400"
+                                }`}
+                            >
+                                Joga há quantos anos
+                            </label>
+                            <Input error={errors.yearsPlaying} id="yearsPlaying" type="number" placeholder="Tudo bem ser ZERO" {...register("yearsPlaying", { required: "Coloque nem que seja 0"})} />
+
+
                         </div>
                         <div className="flex flex-col gap-2">
                             <label htmlFor="discord">Qual seu Discord</label>
-                            <Input id="discord" placeholder="Usuario#0000" {...register("discord")} />
+                            <Input  error={errors.discord} id="discord" placeholder="Usuario#0000" {...register("discord")} />
                         </div>
                     </div>
 
@@ -223,7 +249,7 @@ export function CreateAdModal() {
 
                         <button
                             type="submit"
-                            className="bg-violet-500 hover:bg-violet-600 px-5 h-12 rounded-md font-semibold flex items-center gap-3"       
+                            className="bg-violet-500 hover:bg-violet-600 px-5 h-12 rounded-md font-semibold flex items-center gap-3"
                         >
                             <GameController size={24} />
                             Encontrar Duo
