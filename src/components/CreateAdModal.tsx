@@ -21,7 +21,7 @@ interface CreateAdProps {
     discord: string,
     yearsPlaying: string,
     hourStart: string,
-    hourEnd: string
+    hourEnd: string,
 }
 
 export function CreateAdModal() {
@@ -39,6 +39,11 @@ export function CreateAdModal() {
 
     const handleCreadtAd: SubmitHandler<CreateAdProps> = async (data, event) => {
         event?.preventDefault()
+
+        console.log(data.hourEnd)
+        console.log(typeof data.hourEnd)
+
+        const hourEnd =  data.hourEnd
 
         try {
             await axios.post("http://localhost:3333/ads", {
@@ -60,34 +65,6 @@ export function CreateAdModal() {
         }
     }
 
-
-    // async function handleCreadtAd(event: FormEvent) {
-    //     event.preventDefault()
-
-    //     const formData = new FormData(event.target as HTMLFormElement)
-
-    //     const data = Object.fromEntries(formData)
-
-
-    //     try {
-    //         await axios.post("http://localhost:3333/ads", {
-
-    //             gameId: data.game,
-    //             name: data.name,
-    //             discord: data.discord,
-    //             yearsPlaying: Number(data.yearsPlaying),
-    //             weekDays: weekDays.map(Number),
-    //             hourStart: data.hourStart,
-    //             hourEnd: data.hourEnd,
-    //             useVoiceChannel: useVoiceChannel
-    //         })
-
-    //         alert("Anúncio criado com sucesso!!!")
-    //     } catch (err) {
-    //         alert("Erro")
-    //         console.log(err)
-    //     }
-    // }
     return (
         <Dialog.Portal>
             <Dialog.Overlay className='bg-black/60 inset-0 fixed' />
@@ -101,10 +78,10 @@ export function CreateAdModal() {
                         <select
                             id="game"
                             className="bg-zinc-900 px-4 py-3 rounded text-sm placeholder:text-zinc-500"
-                            defaultValue=""
                             {...register("game")}
+                            defaultValue=""
                         >
-                            <option defaultValue="" disabled selected>Selecione o game que deseja jogar</option>
+                            <option defaultValue="">Selecione o game que deseja jogar</option>
 
                             {games.map(game => {
                                 return <option key={game.id} value={game.id}>{game.title}</option>
@@ -135,10 +112,10 @@ export function CreateAdModal() {
 
                     <div className="flex gap-6">
                         <div className="flex flex-col gap-2">
-                            <Label htmlFor="weekDays" title="Quando custema jogar?" />
+                            <Label htmlFor="weekDays" title="Quando custema jogar?"/>
                             <TaggleGroup.Root type="multiple" className="grid grid-cols-4 gap-2"
                                 value={weekDays}
-                                onValueChange={setWeekDays}
+                                onValueChange={setWeekDays}  
                             >
                                 <TaggleGroup.Item
                                     value="0"
@@ -150,7 +127,7 @@ export function CreateAdModal() {
                                 <TaggleGroup.Item
                                     value="1"
                                     title="Segunda"
-                                    className={`w-8 h-8 roundded ${weekDays.includes('1') ? 'bg-violet-500' : 'bg-zinc-900'}`}
+                                    className={`w-8 h-8 roundded ${weekDays.includes('1') ? 'bg-violet-500' : 'bg-zinc-900'}`}              
                                 >
                                     S
                                 </TaggleGroup.Item>
@@ -190,13 +167,15 @@ export function CreateAdModal() {
                                     S
                                 </TaggleGroup.Item>
                             </TaggleGroup.Root>
+
+
                         </div>
 
                         <div className="flex flex-col gap-2 flex-1">
                             <Label htmlFor="hourStart" title="Qual horário do dia" />
                             <div className="grid grid-cols-2 gap-2">
-                                <Input id="hourStart" type="time" placeholder="De" {...register("hourStart")} />
-                                <Input id="hourEnd" type="time" placeholder="Até" {...register("hourEnd")} />
+                                <Input error={errors.hourStart} id="hourStart" type="time" placeholder="De" {...register("hourStart", {required: "Esse não pode faltar..."})} />
+                                <Input error={errors.hourEnd} id="hourEnd" type="time" placeholder="Até" {...register("hourEnd", {required: "Esse não pode faltar..."})} />
                             </div>
                         </div>
                     </div>
