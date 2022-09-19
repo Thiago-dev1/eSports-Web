@@ -7,6 +7,7 @@ import { Check, GameController } from "phosphor-react"
 
 import { Input } from "./Form/Input"
 import { SubmitHandler, useForm, FormState } from "react-hook-form"
+import { Label } from "./Form/Label"
 
 
 interface Game {
@@ -112,46 +113,29 @@ export function CreateAdModal() {
                     </div>
 
                     <div className='flex flex-col gap-2'>
-                        <label 
-                            htmlFor="name" 
-                            className={`font-semibold ${errors.name
-                                ? "text-red-300 border-red-400"
-                                : "text-white border-purple-400"
-                            }`}>Seu nome  (ou nickname)</label>
+                        <Label htmlFor="name" title="Seu nome  (ou nickname)" error={errors.name} />
                         <Input
                             id="name"
                             placeholder="Como te chamam dentro do game?"
                             error={errors.name}
                             {...register("name", { required: "Digite seu nick" })}
                         />
-
                     </div>
 
                     <div className="grid grid-cols-2 gap-2">
                         <div className="flex flex-col gap-2">
-                            <label 
-                                htmlFor="yearsPlaying"
-                                className={`font-semibold ${errors.yearsPlaying
-                                    ? "text-red-300 border-red-400"
-                                    : "text-white border-purple-400"
-                                }`}
-                            >
-                                Joga há quantos anos
-                            </label>
+                            <Label htmlFor="yearsPlaying" title="Joga há quantos anos" error={errors.yearsPlaying} />
                             <Input error={errors.yearsPlaying} id="yearsPlaying" type="number" placeholder="Tudo bem ser ZERO" {...register("yearsPlaying", { required: "Coloque nem que seja 0"})} />
-
-
                         </div>
                         <div className="flex flex-col gap-2">
-                            <label htmlFor="discord">Qual seu Discord</label>
+                            <Label htmlFor="discord" title="Qual seu Discord" error={errors.discord}/>
                             <Input  error={errors.discord} id="discord" placeholder="Usuario#0000" {...register("discord", { required: "Falta aqui." })} />
                         </div>
                     </div>
 
                     <div className="flex gap-6">
                         <div className="flex flex-col gap-2">
-                            <label htmlFor="weekDays">Quando custema jogar?</label>
-
+                            <Label htmlFor="weekDays" title="Quando custema jogar?" />
                             <TaggleGroup.Root type="multiple" className="grid grid-cols-4 gap-2"
                                 value={weekDays}
                                 onValueChange={setWeekDays}
@@ -209,7 +193,7 @@ export function CreateAdModal() {
                         </div>
 
                         <div className="flex flex-col gap-2 flex-1">
-                            <label htmlFor="hourStart">Qual horário do dia</label>
+                            <Label htmlFor="hourStart" title="Qual horário do dia" />
                             <div className="grid grid-cols-2 gap-2">
                                 <Input id="hourStart" type="time" placeholder="De" {...register("hourStart")} />
                                 <Input id="hourEnd" type="time" placeholder="Até" {...register("hourEnd")} />
