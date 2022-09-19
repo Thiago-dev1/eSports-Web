@@ -124,11 +124,6 @@ export function CreateAdModal() {
                             error={errors.name}
                             {...register("name", { required: "Digite seu nick" })}
                         />
-                        {errors.name && (
-                            <p className="text-red-500 text-sm mt-2">
-                                {errors.name.message}
-                            </p>
-                        )}
 
                     </div>
 
@@ -149,7 +144,7 @@ export function CreateAdModal() {
                         </div>
                         <div className="flex flex-col gap-2">
                             <label htmlFor="discord">Qual seu Discord</label>
-                            <Input  error={errors.discord} id="discord" placeholder="Usuario#0000" {...register("discord")} />
+                            <Input  error={errors.discord} id="discord" placeholder="Usuario#0000" {...register("discord", { required: "Falta aqui." })} />
                         </div>
                     </div>
 
