@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import * as Dialog from "@radix-ui/react-dialog"
+import { useKeenSlider } from "keen-slider/react"
 
+import "keen-slider/keen-slider.min.css"
 
 import { GameBanner } from './components/GameBanner'
 import { CreateAdBanner } from './components/CreateAdBanner'
@@ -28,6 +30,17 @@ function App() {
 
   const [games, setGames] = useState<Game[]>([])
 
+  // altere aqui para funcionar o carrossel
+  // arrumar...
+  const [sliderRef] = useKeenSlider({
+    loop: true,
+    mode: "free",
+    slides: {
+      perView: 6,
+      spacing: 5,
+    },
+  })
+
   useEffect(() => {
     axios("http://localhost:3333/games")
       .then(response => setGames(response.data))
@@ -38,7 +51,7 @@ function App() {
       <img src={Logo} alt="Logo" />
       <h1 className='text-white text-6xl mt-20 font-black'>Seu <span className='text-transparent bg-nlw-gradient bg-clip-text'>duo</span> está aqui.</h1>
 
-      <div className='grid grid-cols-6 gap-6 mt-16'>
+      <div ref={sliderRef} className='keen-slider mt-16'>
         {games.map(game => {
           return (
             <GameBanner key={game.id} bannerUrl={game.bannerUrl} title={game.title} count={game._count.Ad} />

@@ -40,11 +40,6 @@ export function CreateAdModal() {
     const handleCreadtAd: SubmitHandler<CreateAdProps> = async (data, event) => {
         event?.preventDefault()
 
-        console.log(data.hourEnd)
-        console.log(typeof data.hourEnd)
-
-        const hourEnd =  data.hourEnd
-
         try {
             await axios.post("http://localhost:3333/ads", {
 
