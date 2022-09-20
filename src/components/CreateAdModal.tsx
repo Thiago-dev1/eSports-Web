@@ -22,13 +22,14 @@ interface CreateAdProps {
     yearsPlaying: string,
     hourStart: string,
     hourEnd: string,
+    weekDays: string
 }
 
 export function CreateAdModal() {
     const { register, handleSubmit, formState: { errors } } = useForm<CreateAdProps>()
 
     const [games, setGames] = useState<Game[]>([])
-    const [weekDays, setWeekDays] = useState<string[]>([])
+    const [weekDays, setWeekDays] = useState<string[]>(['0'])
     const [useVoiceChannel, setUseVoiceChannel] = useState<boolean>(false)
 
     useEffect(() => {
@@ -95,7 +96,7 @@ export function CreateAdModal() {
                     </div>
 
                     <div className="grid grid-cols-2 gap-2">
-                        <div className="flex flex-col gap-2">
+                        <div className="flex flex-col gap-2 ">
                             <Label htmlFor="yearsPlaying" title="Joga há quantos anos" error={errors.yearsPlaying} />
                             <Input error={errors.yearsPlaying} id="yearsPlaying" type="number" placeholder="Tudo bem ser ZERO" {...register("yearsPlaying", { required: "Coloque nem que seja 0"})} />
                         </div>
@@ -106,11 +107,12 @@ export function CreateAdModal() {
                     </div>
 
                     <div className="flex gap-6">
-                        <div className="flex flex-col gap-2">
+                        <div className={`flex flex-col gap-2 ${weekDays.length < 1 ? "text-red-700" : "text-white"}`}>
                             <Label htmlFor="weekDays" title="Quando custema jogar?"/>
                             <TaggleGroup.Root type="multiple" className="grid grid-cols-4 gap-2"
                                 value={weekDays}
-                                onValueChange={setWeekDays}  
+                                onValueChange={setWeekDays} 
+                                {...register("weekDays",{required: "aqui."})}
                             >
                                 <TaggleGroup.Item
                                     value="0"
@@ -163,11 +165,11 @@ export function CreateAdModal() {
                                 </TaggleGroup.Item>
                             </TaggleGroup.Root>
 
-
+                            {weekDays.length < 1 ? "Selecione um dia": ""}
                         </div>
 
                         <div className="flex flex-col gap-2 flex-1">
-                            <Label htmlFor="hourStart" title="Qual horário do dia" />
+                            <Label htmlFor="hourStart" title="Qual horário do dia" error={errors.hourStart || errors.hourEnd} />
                             <div className="grid grid-cols-2 gap-2">
                                 <Input error={errors.hourStart} id="hourStart" type="time" placeholder="De" {...register("hourStart", {required: "Esse não pode faltar..."})} />
                                 <Input error={errors.hourEnd} id="hourEnd" type="time" placeholder="Até" {...register("hourEnd", {required: "Esse não pode faltar..."})} />

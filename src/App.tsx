@@ -47,11 +47,11 @@ function App() {
   }, [])
 
   return (
-    <div className='max-w-[1334px] mx-auto flex flex-col items-center my-20'>
+    <div className='max-w-[1334px] xl:max-w-[750px] mx-auto flex flex-col items-center my-20 xl:my-6 sm:text-center'>
       <img src={Logo} alt="Logo" />
-      <h1 className='text-white text-6xl mt-20 font-black'>Seu <span className='text-transparent bg-nlw-gradient bg-clip-text'>duo</span> está aqui.</h1>
+      <h1 className='text-white text-6xl xl:text-5xl mt-20 xl:mt-15 font-black'>Seu <span className='text-transparent bg-nlw-gradient bg-clip-text'>duo</span> está aqui.</h1>
 
-      <div ref={sliderRef} className='keen-slider mt-16'>
+      <div ref={sliderRef} className='keen-slider mt-16 sm:h-44 '>
         {games.map(game => {
           return (
             <GameBanner key={game.id} bannerUrl={game.bannerUrl} title={game.title} count={game._count.Ad} />
