@@ -112,7 +112,6 @@ export function CreateAdModal() {
                             <TaggleGroup.Root type="multiple" className="grid grid-cols-4 gap-2"
                                 value={weekDays}
                                 onValueChange={setWeekDays} 
-                                {...register("weekDays",{required: "aqui."})}
                             >
                                 <TaggleGroup.Item
                                     value="0"
