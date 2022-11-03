@@ -36,7 +36,7 @@ function App() {
     loop: true,
     mode: "free",
     slides: {
-      perView: 6,
+      perView: 5, // alterar para o funcionamento do carrossel
       spacing: 5,
     },
   })
