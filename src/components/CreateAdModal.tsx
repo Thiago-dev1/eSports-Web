@@ -25,7 +25,12 @@ interface CreateAdProps {
     weekDays: string
 }
 
-export function CreateAdModal() {
+interface CreateAdModalProps {
+    open: boolean,
+    setOpen: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+export function CreateAdModal({open, setOpen}: CreateAdModalProps) {
     const { register, handleSubmit, formState: { errors } } = useForm<CreateAdProps>()
 
     const [games, setGames] = useState<Game[]>([])
@@ -33,8 +38,7 @@ export function CreateAdModal() {
     const [useVoiceChannel, setUseVoiceChannel] = useState<boolean>(false)
 
     useEffect(() => {
-        axios("http://localhost:3333/games")
-            .then(response => setGames(response.data))
+
     }, [])
 
 
@@ -55,6 +59,7 @@ export function CreateAdModal() {
             })
 
             alert("Anúncio criado com sucesso!!!")
+            setOpen(false)
         } catch (err) {
             alert("Erro")
             console.log(err)
@@ -201,13 +206,14 @@ export function CreateAdModal() {
                             Cancelar
                         </Dialog.Close>
 
-                        <button
-                            type="submit"
-                            className="bg-violet-500 hover:bg-violet-600 px-5 h-12 rounded-md font-semibold flex items-center gap-3"
-                        >
-                            <GameController size={24} />
-                            Encontrar Duo
-                        </button>
+                        
+                            <button
+                                type="submit"
+                                className="bg-violet-500 hover:bg-violet-600 px-5 h-12 rounded-md font-semibold flex items-center gap-3"
+                            >
+                                <GameController size={24} />
+                                Encontrar Duo
+                            </button>
                     </footer>
                 </form>
 

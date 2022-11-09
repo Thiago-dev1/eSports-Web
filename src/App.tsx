@@ -29,6 +29,7 @@ interface Game {
 function App() {
 
   const [games, setGames] = useState<Game[]>([])
+  const [open, setOpen] = useState(false);
 
   // altere aqui para funcionar o carrossel
   // arrumar...
@@ -46,6 +47,8 @@ function App() {
       .then(response => setGames(response.data))
   }, [])
 
+  console.log(open)
+
   return (
     <div className='max-w-[1334px] xl:max-w-[750px] mx-auto flex flex-col items-center my-20 xl:my-6 sm:text-center'>
       <img src={Logo} alt="Logo" />
@@ -59,10 +62,10 @@ function App() {
         })}
       </div>
       
-      <Dialog.Root>
+      <Dialog.Root open={open} onOpenChange={setOpen}>
         <CreateAdBanner />
 
-        <CreateAdModal />
+        <CreateAdModal open={open} setOpen={setOpen} />
       </Dialog.Root>
     </div>
   )
